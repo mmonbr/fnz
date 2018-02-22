@@ -1,0 +1,62 @@
+webserver:
+  build: .
+  dockerfile: ./docker/webserver/Dockerfile
+  links:
+    - database
+    - redis
+    - queue
+  volumes:
+    - ./:/var/www
+  environment:
+    - WEB_SERVER_NAME=finizens.local
+    - WEB_DOCUMENT_ROOT=/var/www/public
+    - WEB_DOCUMENT_INDEX=index.php
+  ports:
+    - 80:80
+    - 443:443
+
+database:
+  image: mysql
+  restart: always
+  environment:
+    - MYSQL_DATABASE=finizens
+    - MYSQL_USER=finizens
+    - MYSQL_PASSWORD=finizens
+    - MYSQL_ROOT_PASSWORD=finizens
+  ports:
+      - 3306:3306
+
+redis:
+  image: redis
+  ports:
+      - 6397:6379
+
+queue:
+  image: rabbitmq:management
+  ports:
+    - 5672:5672
+    - 15672:15672
+
+mailer:
+  image: mailhog/mailhog
+  ports:
+    - 8025:8025
+
+phpmyadmin:
+  image: phpmyadmin/phpmyadmin
+  restart: always
+  environment:
+    - PMA_HOST=database
+  links:
+    - database
+  ports:
+    - 8080:80
+
+redis-commander:
+  image: rediscommander/redis-commander:latest
+  environment:
+    - REDIS_HOSTS=local:redis:6379
+  links:
+    - redis
+  ports:
+    - 8081:8081
