@@ -2,40 +2,63 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Communication\Contact;
-use SplFileObject;
 use DateTimeImmutable;
+use GuzzleHttp\ClientInterface;
 use App\Domain\Communication\SMS;
 use App\Domain\Communication\Call;
-use App\Domain\Communication\Communications;
+use GuzzleHttp\Exception\ClientException;
+use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\ValueObject\PhoneNumber;
 use App\Domain\Communication\CommunicationCollection;
 use App\Domain\Communication\CommunicationRepository;
 
 class LogCommunicationRepository implements CommunicationRepository
 {
     /**
+     * @var ClientInterface
+     */
+    private $client;
+    /**
+     * @var CommunicationCollection
+     */
+    private $communicationCollection;
+
+    /**
+     * LogCommunicationRepository constructor.
+     * @param ClientInterface $client
+     * @param CommunicationCollection $communicationCollection
+     */
+    public function __construct(ClientInterface $client, CommunicationCollection $communicationCollection)
+    {
+        $this->client = $client;
+        $this->communicationCollection = $communicationCollection;
+    }
+
+    /**
      * @param int $phoneNumber
      * @return CommunicationCollection
      */
     public function findByPhoneNumber(int $phoneNumber): CommunicationCollection
     {
-        $file = new SplFileObject("https://gist.githubusercontent.com/rodrigm/8d9c2f79d637c4e0673c85f1da365ae3/raw/16ccd81dbaa895d44ac05190626de84169722700/communications.{$phoneNumber}.log");
+        try {
+            $response = $this->client->request('GET', "communications.{$phoneNumber}.log")->getBody();
+        } catch (ClientException $exception) {
+            return $this->communicationCollection;
+        }
 
-        $communications = new Communications();
-
-        while (false === $file->eof()) {
-            $currentLine = $file->fgets();
+        while (false === $response->eof()) {
+            $currentLine = \GuzzleHttp\Psr7\readline($response);
 
             if (preg_match('/C(\s{0,6}\d{3,9})(\s{0,6}\d{3,9})(0|1)(.{1,24})(\d{14})(\d{6})/', $currentLine, $matches)) {
-                $communications->add($this->buildCallFromArray($matches));
+                $this->communicationCollection->add($this->buildCallFromArray($matches));
             }
 
             if (preg_match('/S(\s{0,6}\d{3,9})(\s{0,6}\d{3,9})(0|1)(.{1,24})(\d{14})/', $currentLine, $matches)) {
-                $communications->add($this->buildSMSFromArray($matches));
+                $this->communicationCollection->add($this->buildSMSFromArray($matches));
             }
         }
 
-        return $communications;
+        return $this->communicationCollection;
     }
 
     /**
@@ -55,11 +78,11 @@ class LogCommunicationRepository implements CommunicationRepository
 
         $contact = new Contact(
             $contactName,
-            $contactNumber
+            new PhoneNumber($contactNumber)
         );
 
         return new Call(
-            $origin,
+            new PhoneNumber($origin),
             $direction,
             $contact,
             $date,
@@ -83,11 +106,11 @@ class LogCommunicationRepository implements CommunicationRepository
 
         $contact = new Contact(
             $contactName,
-            $contactNumber
+            new PhoneNumber($contactNumber)
         );
 
         return new SMS(
-            $origin,
+            new PhoneNumber($origin),
             $direction,
             $contact,
             $date

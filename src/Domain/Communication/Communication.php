@@ -2,19 +2,31 @@
 
 namespace App\Domain\Communication;
 
-use JsonSerializable;
+use DateTimeImmutable;
+use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\ValueObject\PhoneNumber;
 
-interface Communication extends JsonSerializable
+interface Communication
 {
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function origin(): int;
+    public function origin(): PhoneNumber;
 
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function destination(): int;
+    public function destination(): PhoneNumber;
+
+    /**
+     * @return Contact
+     */
+    public function contact(): Contact;
+
+    /**
+     * @return string
+     */
+    public function direction(): string;
 
     /**
      * @return bool
@@ -25,4 +37,9 @@ interface Communication extends JsonSerializable
      * @return bool
      */
     public function incoming(): bool;
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function date(): DateTimeImmutable;
 }

@@ -53,6 +53,27 @@ final class Communications implements CommunicationCollection
     }
 
     /**
+     * @param null|string $type
+     * @return CommunicationCollection
+     */
+    public function byType(?string $type): CommunicationCollection
+    {
+        switch ($type) {
+            case 'sms' :
+                $communications = $this->sms();
+                break;
+            case 'call':
+                $communications = $this->calls();
+                break;
+            default:
+                $communications = $this->all();
+        }
+
+        return new self(... $communications);
+    }
+
+
+    /**
      * @param Communication $communication
      * @return CommunicationCollection
      */
@@ -70,7 +91,7 @@ final class Communications implements CommunicationCollection
     public function containingNumber(int $number): CommunicationCollection
     {
         $communications = array_filter($this->communications, function (Communication $communication) use ($number) {
-            return $communication->origin() === $number || $communication->destination() === $number;
+            return $communication->origin()->number() === $number || $communication->destination()->number() === $number;
         });
 
         return new self(... $communications);

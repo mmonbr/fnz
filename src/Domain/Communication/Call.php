@@ -3,11 +3,13 @@
 namespace App\Domain\Communication;
 
 use DateTimeImmutable;
+use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\ValueObject\PhoneNumber;
 
-final class Call implements Communication
+final class Call implements VoiceCommunication
 {
     /**
-     * @var int
+     * @var PhoneNumber
      */
     private $origin;
     /**
@@ -29,13 +31,13 @@ final class Call implements Communication
 
     /**
      * Call constructor.
-     * @param int $origin
+     * @param PhoneNumber $origin
      * @param int $direction
      * @param Contact $contact
      * @param DateTimeImmutable $date
      * @param int $duration
      */
-    public function __construct(int $origin, int $direction, Contact $contact, DateTimeImmutable $date, int $duration)
+    public function __construct(PhoneNumber $origin, int $direction, Contact $contact, DateTimeImmutable $date, int $duration)
     {
         $this->origin = $origin;
         $this->direction = $direction;
@@ -45,17 +47,17 @@ final class Call implements Communication
     }
 
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function origin(): int
+    public function origin(): PhoneNumber
     {
         return $this->origin;
     }
 
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function destination(): int
+    public function destination(): PhoneNumber
     {
         return $this->contact->number();
     }
@@ -110,23 +112,5 @@ final class Call implements Communication
     public function duration(): int
     {
         return $this->duration;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'type'      => 'call',
-            'origin'    => $this->origin(),
-            'direction' => $this->direction(),
-            'date'      => $this->date(),
-            'contact'   => [
-                'name'   => $this->contact->name(),
-                'number' => $this->contact->number(),
-            ],
-            'duration'  => $this->duration()
-        ];
     }
 }

@@ -16,7 +16,7 @@ interface CommunicationCollection extends IteratorAggregate, Countable
     /**
      * @return CommunicationCollection
      */
-    public function all() : CommunicationCollection;
+    public function all(): CommunicationCollection;
 
     /**
      * @return CommunicationCollection
@@ -29,25 +29,31 @@ interface CommunicationCollection extends IteratorAggregate, Countable
     public function sms(): CommunicationCollection;
 
     /**
-     * @param int $number
+     * @param null|string $type
      * @return CommunicationCollection
      */
-    public function containingNumber(int $number) : CommunicationCollection;
+    public function byType(?string $type): CommunicationCollection;
 
     /**
      * @param int $number
      * @return CommunicationCollection
      */
-    public function originIs(int $number) : CommunicationCollection;
+    public function containingNumber(int $number): CommunicationCollection;
 
     /**
      * @param int $number
      * @return CommunicationCollection
      */
-    public function destinationIs(int $number) : CommunicationCollection;
+    public function originIs(int $number): CommunicationCollection;
+
+    /**
+     * @param int $number
+     * @return CommunicationCollection
+     */
+    public function destinationIs(int $number): CommunicationCollection;
 
     /**
      * @return array
      */
-    public function toArray() : array;
+    public function toArray(): array;
 }

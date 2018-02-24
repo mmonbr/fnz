@@ -3,11 +3,13 @@
 namespace App\Domain\Communication;
 
 use DateTimeImmutable;
+use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\ValueObject\PhoneNumber;
 
-final class SMS implements Communication
+final class SMS implements WrittenCommunication
 {
     /**
-     * @var int
+     * @var PhoneNumber
      */
     private $origin;
     /**
@@ -25,12 +27,12 @@ final class SMS implements Communication
 
     /**
      * SMS constructor.
-     * @param int $origin
+     * @param PhoneNumber $origin
      * @param int $direction
      * @param Contact $contact
      * @param DateTimeImmutable $date
      */
-    public function __construct(int $origin, int $direction, Contact $contact, DateTimeImmutable $date)
+    public function __construct(PhoneNumber $origin, int $direction, Contact $contact, DateTimeImmutable $date)
     {
         $this->origin = $origin;
         $this->direction = $direction;
@@ -39,17 +41,17 @@ final class SMS implements Communication
     }
 
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function origin(): int
+    public function origin(): PhoneNumber
     {
         return $this->origin;
     }
 
     /**
-     * @return int
+     * @return PhoneNumber
      */
-    public function destination(): int
+    public function destination(): PhoneNumber
     {
         return $this->contact->number();
     }
@@ -83,27 +85,18 @@ final class SMS implements Communication
     }
 
     /**
+     * @return Contact
+     */
+    public function contact(): Contact
+    {
+        return $this->contact;
+    }
+
+    /**
      * @return DateTimeImmutable
      */
     public function date(): DateTimeImmutable
     {
         return $this->date;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function jsonSerialize(): array
-    {
-        return [
-            'type'      => 'sms',
-            'origin'    => $this->origin(),
-            'direction' => $this->direction(),
-            'date'      => $this->date(),
-            'contact'   => [
-                'name'   => $this->contact->name(),
-                'number' => $this->contact->number(),
-            ]
-        ];
     }
 }

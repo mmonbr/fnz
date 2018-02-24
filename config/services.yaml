@@ -17,6 +17,10 @@ services:
         resource: '../src/Infrastructure'
         #exclude: '../src/{Entity,migrations,Tests}'
 
+    App\Domain\:
+        resource: '../src/Domain'
+        #exclude: '../src/{Entity,migrations,Tests}'
+
     App\Application\:
         resource: '../src/Application'
     # controllers are imported separately to make sure services can be injected
@@ -29,8 +33,14 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Infrastructure\Repository\LogCommunicationRepository: ~
 
-    App\Infrastructure\Repository\CacheLogCommunicationRepository:
-        decorates: App\Infrastructure\Repository\LogCommunicationRepository
-        arguments: ['@App\Infrastructure\Repository\CacheLogCommunicationRepository.inner']
+#    App\Infrastructure\Repository\CacheLogCommunicationRepository:
+#        decorates: App\Infrastructure\Repository\LogCommunicationRepository
+#        arguments: ['@App\Infrastructure\Repository\CacheLogCommunicationRepository.inner']
 
     App\Domain\Communication\CommunicationRepository: '@App\Infrastructure\Repository\LogCommunicationRepository'
+
+    App\Domain\Communication\CommunicationCollection: '@App\Domain\Communication\Communications'
+
+    GuzzleHttp\ClientInterface:
+        class: GuzzleHttp\Client
+        arguments: [{ base_uri: 'https://gist.githubusercontent.com/rodrigm/8d9c2f79d637c4e0673c85f1da365ae3/raw/16ccd81dbaa895d44ac05190626de84169722700'}]
