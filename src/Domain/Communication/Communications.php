@@ -34,7 +34,7 @@ final class Communications implements CommunicationCollection
     public function calls(): CommunicationCollection
     {
         $communications = array_filter($this->communications, function (Communication $communication) {
-            return $communication instanceof Call;
+            return $communication instanceof PhoneCall;
         });
 
         return new self(... $communications);

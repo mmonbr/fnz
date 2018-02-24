@@ -6,7 +6,7 @@ use DateTimeImmutable;
 use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
-final class Call implements VoiceCommunication
+final class PhoneCall implements VoiceCommunication
 {
     /**
      * @var PhoneNumber

@@ -5,7 +5,7 @@ namespace App\Infrastructure\Repository;
 use DateTimeImmutable;
 use GuzzleHttp\ClientInterface;
 use App\Domain\Communication\SMS;
-use App\Domain\Communication\Call;
+use App\Domain\Communication\PhoneCall;
 use GuzzleHttp\Exception\ClientException;
 use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
@@ -63,9 +63,9 @@ class LogCommunicationRepository implements CommunicationRepository
 
     /**
      * @param array $data
-     * @return Call
+     * @return PhoneCall
      */
-    private function buildCallFromArray(array $data): Call
+    private function buildCallFromArray(array $data): PhoneCall
     {
         $data = array_map('trim', $data);
 
@@ -83,7 +83,7 @@ class LogCommunicationRepository implements CommunicationRepository
             new PhoneNumber($contactNumber)
         );
 
-        return new Call(
+        return new PhoneCall(
             new PhoneNumber($origin),
             $direction,
             $contact,

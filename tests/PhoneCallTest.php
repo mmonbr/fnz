@@ -6,15 +6,15 @@ use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use App\Domain\Communication\Call;
+use App\Domain\Communication\PhoneCall;
 
-class CallTest extends TestCase
+class PhoneCallTest extends TestCase
 {
     public function test_a_call_can_be_instantiated()
     {
         $contact = new Contact('Manuel', new PhoneNumber(700000000));
 
-        $call = new Call(
+        $call = new PhoneCall(
             new PhoneNumber(600000000),
             0,
             $contact,
@@ -22,6 +22,6 @@ class CallTest extends TestCase
             60
         );
 
-        $this->assertInstanceOf(Call::class, $call);
+        $this->assertInstanceOf(PhoneCall::class, $call);
     }
 }
