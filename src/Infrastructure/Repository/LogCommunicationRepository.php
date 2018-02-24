@@ -67,10 +67,12 @@ class LogCommunicationRepository implements CommunicationRepository
      */
     private function buildCallFromArray(array $data): Call
     {
+        $data = array_map('trim', $data);
+
         $origin = $data[1];
         $destination = $data[2];
         $direction = $data[3];
-        $contactName = trim($data[4]);
+        $contactName = $data[4];
         $date = DateTimeImmutable::createFromFormat('dmYHis', $data[5]);
         $duration = $data[6];
 
@@ -96,10 +98,12 @@ class LogCommunicationRepository implements CommunicationRepository
      */
     private function buildSMSFromArray(array $data): SMS
     {
+        $data = array_map('trim', $data);
+
         $origin = $data[1];
         $destination = $data[2];
         $direction = $data[3];
-        $contactName = trim($data[4]);
+        $contactName = $data[4];
         $date = DateTimeImmutable::createFromFormat('dmYHis', $data[5]);
 
         $contactNumber = (1 === $direction) ? $origin : $destination;

@@ -17,7 +17,7 @@ final class PhoneNumber
      */
     public function __construct(string $number)
     {
-        $this->validateNumber($number);
+        $this->assertNumberIsValid($number);
 
         $this->number = $number;
     }
@@ -26,12 +26,12 @@ final class PhoneNumber
      * @param string $number
      * @throws InvalidPhoneNumber
      */
-    private function validateNumber(string $number)
+    private function assertNumberIsValid(string $number)
     {
-        $expression = '/^(\+34|0034|34)?[\s|\-|\.]?[6|7|9][\s|\-|\.]?([0-9][\s|\-|\.]?){8}$/';
+        $expression = '/^(\+34|0034|34)?[\s|\-|\.]?(([\d]{3,4})|([6|7|9][\s|\-|\.]?([0-9][\s|\-|\.]?){8}))$/';
 
-        if (false === preg_match($expression, $number)) {
-            throw new InvalidPhoneNumber();
+        if (0 === preg_match($expression, $number)) {
+            throw InvalidPhoneNumber::forNumber($number);
         }
     }
 
