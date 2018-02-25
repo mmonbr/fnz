@@ -6,6 +6,15 @@ docker-compose exec -u application webserver bash -c "cd /var/www; composer inst
 docker-compose exec -u application webserver bash -c "cd /var/www; bin/phpunit"
 ```
 
+#Notas
+- En LogCommunicationRepository podría haber utilizado una factoría para construir las entidades pero no estoy seguro de que sea su responsabilidad. En cualquier caso dejo la interfaz en Domain\Communications.
+- Utilizo Traits para implementar el método Outgoing en las distintas comunicaciones.
+- En los endpoints de la API se puede filtrar por *type:* (sms|call) y *direction*: (incoming|outgoing).
+- He dejado algunos métodos sin implementar en Domain\ValueObject\PhoneNumber como ejemplo de qué podría hacer el VO.
+- Quizás lo de Incoming/Outgoing estaba de más y algo "overengineeried".
+
+¡Espero que os guste!
+
 #Ejemplos respuestas API
 
 ```
