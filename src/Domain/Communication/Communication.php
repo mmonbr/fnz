@@ -3,7 +3,6 @@
 namespace App\Domain\Communication;
 
 use DateTimeImmutable;
-use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
 interface Communication

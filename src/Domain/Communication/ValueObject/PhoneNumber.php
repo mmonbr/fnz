@@ -42,4 +42,43 @@ final class PhoneNumber
     {
         return $this->number;
     }
+
+    /**
+     * @return bool
+     */
+    public function isMobile(): bool
+    {
+        //TODO: Regex to check whether number is mobile or not
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLocal(): bool
+    {
+        //TODO: Regex to check whether number is local or not
+    }
+
+    /**
+     * @return bool
+     */
+    public function isService(): bool
+    {
+        //TODO: Regex to check whether number is service or not
+    }
+
+    /**
+     * @return string
+     */
+    public function prefix(): string
+    {
+        //TODO: Regex to extract prefix
+    }
+
+    /**
+     * @return PhoneNumber
+     */
+    public function withoutPrefix() : self {
+        //TODO: Return new instance without prefix
+    }
 }

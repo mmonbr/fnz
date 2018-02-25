@@ -169,7 +169,7 @@ final class Communications implements CommunicationCollection
     public function originIs(int $number): CommunicationCollection
     {
         $communications = array_filter($this->communications, function (Communication $communication) use ($number) {
-            return $communication->origin() === $number;
+            return $communication->origin()->number() === $number;
         });
 
         return new self(... $communications);
@@ -182,7 +182,7 @@ final class Communications implements CommunicationCollection
     public function destinationIs(int $number): CommunicationCollection
     {
         $communications = array_filter($this->communications, function (Communication $communication) use ($number) {
-            return $communication->destination() === $number;
+            return $communication->destination()->number() === $number;
         });
 
         return new self(... $communications);

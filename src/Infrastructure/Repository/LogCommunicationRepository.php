@@ -5,16 +5,18 @@ namespace App\Infrastructure\Repository;
 use DateTimeImmutable;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
+use App\Domain\Communication\Contact\Contact;
+use App\Domain\Communication\Contact\NullContact;
 use App\Domain\Communication\SpokenCommunication;
 use App\Domain\Communication\Written\IncomingSMS;
 use App\Domain\Communication\Written\OutgoingSMS;
-use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\WrittenCommunication;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 use App\Domain\Communication\CommunicationCollection;
 use App\Domain\Communication\CommunicationRepository;
 use App\Domain\Communication\Spoken\IncomingPhoneCall;
 use App\Domain\Communication\Spoken\OutgoingPhoneCall;
+use App\Domain\Communication\Contact as ContactInterface;
 
 class LogCommunicationRepository implements CommunicationRepository
 {
@@ -80,28 +82,23 @@ class LogCommunicationRepository implements CommunicationRepository
         $date = DateTimeImmutable::createFromFormat('dmYHis', (string)$data[5]);
         $duration = (int)$data[6];
 
-        $contactNumber = (1 === $direction) ? $origin : $destination;
-
-        $contact = new Contact(
-            $contactName,
-            new PhoneNumber($contactNumber)
-        );
-
         if (1 === $direction) {
             return new IncomingPhoneCall(
                 new PhoneNumber($origin),
-                $contact,
-                $date,
-                $duration
-            );
-        } else {
-            return new OutgoingPhoneCall(
-                new PhoneNumber($origin),
-                $contact,
+                new PhoneNumber($destination),
+                $this->buildContact($contactName),
                 $date,
                 $duration
             );
         }
+
+        return new OutgoingPhoneCall(
+            new PhoneNumber($origin),
+            new PhoneNumber($destination),
+            $this->buildContact($contactName),
+            $date,
+            $duration
+        );
     }
 
     /**
@@ -118,25 +115,33 @@ class LogCommunicationRepository implements CommunicationRepository
         $contactName = (string)$data[4];
         $date = DateTimeImmutable::createFromFormat('dmYHis', (string)$data[5]);
 
-        $contactNumber = (1 === $direction) ? $origin : $destination;
-
-        $contact = new Contact(
-            $contactName,
-            new PhoneNumber($contactNumber)
-        );
-
         if (1 === $direction) {
             return new IncomingSMS(
                 new PhoneNumber($origin),
-                $contact,
-                $date
-            );
-        } else {
-            return new OutgoingSMS(
-                new PhoneNumber($origin),
-                $contact,
+                new PhoneNumber($destination),
+                $this->buildContact($contactName),
                 $date
             );
         }
+
+        return new OutgoingSMS(
+            new PhoneNumber($origin),
+            new PhoneNumber($destination),
+            $this->buildContact($contactName),
+            $date
+        );
+    }
+
+    /**
+     * @param string $contactName
+     * @return ContactInterface
+     */
+    public function buildContact(string $contactName): ContactInterface
+    {
+        if (empty($contactName)) {
+            return new NullContact();
+        }
+
+        return new Contact($contactName);
     }
 }

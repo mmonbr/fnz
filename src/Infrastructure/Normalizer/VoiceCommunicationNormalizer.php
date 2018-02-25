@@ -35,8 +35,7 @@ class VoiceCommunicationNormalizer implements NormalizerInterface
             'destination' => $object->destination()->number(),
             'direction'   => $object->direction(),
             'contact'     => [
-                'name'   => $object->contact()->name(),
-                'number' => $object->contact()->number()->number()
+                'name'   => $object->contact()->name()
             ],
             'date'        => $object->date(),
             'duration'    => $object->duration()

@@ -3,7 +3,7 @@
 namespace App\Domain\Communication\Written;
 
 use DateTimeImmutable;
-use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\Contact;
 use App\Domain\Communication\WrittenCommunication;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
@@ -13,6 +13,10 @@ abstract class SMS implements WrittenCommunication
      * @var PhoneNumber
      */
     private $origin;
+    /**
+     * @var PhoneNumber
+     */
+    private $destination;
     /**
      * @var Contact
      */
@@ -25,12 +29,14 @@ abstract class SMS implements WrittenCommunication
     /**
      * SMS constructor.
      * @param PhoneNumber $origin
+     * @param PhoneNumber $destination
      * @param Contact $contact
      * @param DateTimeImmutable $date
      */
-    public function __construct(PhoneNumber $origin, Contact $contact, DateTimeImmutable $date)
+    public function __construct(PhoneNumber $origin, PhoneNumber $destination, Contact $contact, DateTimeImmutable $date)
     {
         $this->origin = $origin;
+        $this->destination = $destination;
         $this->contact = $contact;
         $this->date = $date;
     }
@@ -48,7 +54,7 @@ abstract class SMS implements WrittenCommunication
      */
     public function destination(): PhoneNumber
     {
-        return $this->contact->number();
+        return $this->destination;
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace App\Domain\Communication\Spoken;
 
 use DateTimeImmutable;
+use App\Domain\Communication\Contact;
 use App\Domain\Communication\SpokenCommunication;
-use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
 abstract class PhoneCall implements SpokenCommunication
@@ -13,6 +13,10 @@ abstract class PhoneCall implements SpokenCommunication
      * @var PhoneNumber
      */
     protected $origin;
+    /**
+     * @var PhoneNumber
+     */
+    protected $destination;
     /**
      * @var Contact
      */
@@ -29,13 +33,15 @@ abstract class PhoneCall implements SpokenCommunication
     /**
      * Call constructor.
      * @param PhoneNumber $origin
+     * @param PhoneNumber $destination
      * @param Contact $contact
      * @param DateTimeImmutable $date
      * @param int $duration
      */
-    public function __construct(PhoneNumber $origin, Contact $contact, DateTimeImmutable $date, int $duration)
+    public function __construct(PhoneNumber $origin, PhoneNumber $destination, Contact $contact, DateTimeImmutable $date, int $duration)
     {
         $this->origin = $origin;
+        $this->destination = $destination;
         $this->contact = $contact;
         $this->date = $date;
         $this->duration = $duration;
@@ -54,7 +60,7 @@ abstract class PhoneCall implements SpokenCommunication
      */
     public function destination(): PhoneNumber
     {
-        return $this->contact->number();
+        return $this->destination;
     }
 
     /**
