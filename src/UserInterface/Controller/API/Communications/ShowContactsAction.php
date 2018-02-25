@@ -42,7 +42,14 @@ class ShowContactsAction
      */
     public function __invoke(Request $request, int $numberOne, int $numberTwo)
     {
-        $communications = $this->communicationRepository->findByPhoneNumber($numberOne)->containingNumber($numberTwo)->byType($request->get('type'));
+        $type = $request->query->get('type');
+        $direction = $request->query->get('direction');
+
+        $communications = $this->communicationRepository
+            ->findByPhoneNumber($numberOne)
+            ->containingNumber($numberTwo)
+            ->byType($type)
+            ->byDirection($direction);
 
         return new Response(
             $this->serializer->serialize($communications, 'json'),

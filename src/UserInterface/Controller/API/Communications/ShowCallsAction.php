@@ -2,6 +2,7 @@
 
 namespace App\UserInterface\Controller\API\Communications;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\Communication\CommunicationRepository;
@@ -34,12 +35,18 @@ class ShowCallsAction
 
     /**
      * @Route("/api/communications/{number}/calls", name="api_communications_show_calls", methods={"GET"})
+     * @param Request $request
      * @param int $number
      * @return Response
      */
-    public function __invoke(int $number)
+    public function __invoke(Request $request, int $number)
     {
-        $communications = $this->communicationRepository->findByPhoneNumber($number)->calls();
+        $direction = $request->query->get('direction');
+
+        $communications = $this->communicationRepository
+            ->findByPhoneNumber($number)
+            ->byDirection($direction)
+            ->calls();
 
         return new Response(
             $this->serializer->serialize($communications, 'json'),

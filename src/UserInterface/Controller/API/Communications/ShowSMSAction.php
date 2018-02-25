@@ -2,6 +2,7 @@
 
 namespace App\UserInterface\Controller\API\Communications;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,12 +36,18 @@ class ShowSMSAction
 
     /**
      * @Route("/api/communications/{number}/sms", name="api_communications_show_sms", methods={"GET"})
+     * @param Request $request
      * @param int $number
      * @return Response
      */
-    public function __invoke(int $number)
+    public function __invoke(Request $request, int $number)
     {
-        $communications = $this->communicationRepository->findByPhoneNumber($number)->sms();
+        $direction = $request->query->get('direction');
+
+        $communications = $this->communicationRepository
+            ->findByPhoneNumber($number)
+            ->byDirection($direction)
+            ->sms();
 
         return new Response(
             $this->serializer->serialize($communications, 'json'),

@@ -29,16 +29,6 @@ interface Communication
     public function direction(): string;
 
     /**
-     * @return bool
-     */
-    public function outgoing(): bool;
-
-    /**
-     * @return bool
-     */
-    public function incoming(): bool;
-
-    /**
      * @return DateTimeImmutable
      */
     public function date(): DateTimeImmutable;

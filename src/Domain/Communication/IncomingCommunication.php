@@ -11,20 +11,4 @@ trait IncomingCommunication
     {
         return 'incoming';
     }
-
-    /**
-     * @return bool
-     */
-    public function outgoing(): bool
-    {
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    public function incoming(): bool
-    {
-        return true;
-    }
 }

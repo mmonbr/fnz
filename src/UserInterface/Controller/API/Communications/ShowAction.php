@@ -48,7 +48,13 @@ class ShowAction
      */
     public function __invoke(Request $request, int $number)
     {
-        $communications = $this->communicationRepository->findByPhoneNumber($number)->byType($request->query->get('type'));
+        $type = $request->query->get('type');
+        $direction = $request->query->get('direction');
+
+        $communications = $this->communicationRepository
+            ->findByPhoneNumber($number)
+            ->byType($type)
+            ->byDirection($direction);
 
         return new Response(
             $this->serializer->serialize($communications, 'json'),

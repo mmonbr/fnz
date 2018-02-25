@@ -73,12 +73,12 @@ class LogCommunicationRepository implements CommunicationRepository
     {
         $data = array_map('trim', $data);
 
-        $origin = $data[1];
-        $destination = $data[2];
-        $direction = $data[3];
-        $contactName = $data[4];
-        $date = DateTimeImmutable::createFromFormat('dmYHis', $data[5]);
-        $duration = $data[6];
+        $origin = (int)$data[1];
+        $destination = (int)$data[2];
+        $direction = (int)$data[3];
+        $contactName = (string)$data[4];
+        $date = DateTimeImmutable::createFromFormat('dmYHis', (string)$data[5]);
+        $duration = (int)$data[6];
 
         $contactNumber = (1 === $direction) ? $origin : $destination;
 
@@ -112,11 +112,11 @@ class LogCommunicationRepository implements CommunicationRepository
     {
         $data = array_map('trim', $data);
 
-        $origin = $data[1];
-        $destination = $data[2];
-        $direction = $data[3];
-        $contactName = $data[4];
-        $date = DateTimeImmutable::createFromFormat('dmYHis', $data[5]);
+        $origin = (int)$data[1];
+        $destination = (int)$data[2];
+        $direction = (int)$data[3];
+        $contactName = (string)$data[4];
+        $date = DateTimeImmutable::createFromFormat('dmYHis', (string)$data[5]);
 
         $contactNumber = (1 === $direction) ? $origin : $destination;
 

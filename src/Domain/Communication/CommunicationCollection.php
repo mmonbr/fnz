@@ -29,6 +29,22 @@ interface CommunicationCollection extends IteratorAggregate, Countable
     public function sms(): CommunicationCollection;
 
     /**
+     * @return CommunicationCollection
+     */
+    public function incoming() :CommunicationCollection;
+
+    /**
+     * @return CommunicationCollection
+     */
+    public function outgoing() :CommunicationCollection;
+
+    /**
+     * @param null|string $direction
+     * @return CommunicationCollection
+     */
+    public function byDirection(?string $direction): CommunicationCollection;
+
+    /**
      * @param null|string $type
      * @return CommunicationCollection
      */

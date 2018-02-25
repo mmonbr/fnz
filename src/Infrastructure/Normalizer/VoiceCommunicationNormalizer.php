@@ -2,7 +2,6 @@
 
 namespace App\Infrastructure\Normalizer;
 
-use App\Domain\Communication\PhoneCall;
 use App\Domain\Communication\SpokenCommunication;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -28,7 +27,7 @@ class VoiceCommunicationNormalizer implements NormalizerInterface
      */
     public function normalize($object, $format = null, array $context = array())
     {
-        /** @var PhoneCall $object */
+        /** @var SpokenCommunication $object */
 
         return [
             'type'        => 'call',
