@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\Communication\CommunicationRepository;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class ShowContactsAction
+class ShowCommunicationsAction
 {
     /**
      * @var CommunicationRepository
@@ -34,7 +34,7 @@ class ShowContactsAction
     }
 
     /**
-     * @Route("/api/communications/{numberOne}/contacts/{numberTwo}", name="api_communications_show_contacts", methods={"GET"})
+     * @Route("/api/communications/{numberOne}/communications/{numberTwo}", name="api_communications_show_communications", methods={"GET"})
      * @param Request $request
      * @param int $numberOne
      * @param int $numberTwo

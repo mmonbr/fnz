@@ -1,9 +1,10 @@
 webserver:
+  container_name: webserver
   image: webdevops/php-nginx:7.2
   volumes:
     - ./:/var/www
   environment:
-    - WEB_SERVER_NAME=finizens.local
+    - WEB_SERVER_NAME=f1nizens.local
     - WEB_DOCUMENT_ROOT=/var/www/public
     - WEB_DOCUMENT_INDEX=index.php
   ports:
