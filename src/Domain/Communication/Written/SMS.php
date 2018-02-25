@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Domain\Communication;
+namespace App\Domain\Communication\Written;
 
 use DateTimeImmutable;
 use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\WrittenCommunication;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
-final class SMS implements WrittenCommunication
+abstract class SMS implements WrittenCommunication
 {
     /**
      * @var PhoneNumber
      */
     private $origin;
-    /**
-     * @var string
-     */
-    private $direction;
     /**
      * @var Contact
      */
@@ -28,14 +25,12 @@ final class SMS implements WrittenCommunication
     /**
      * SMS constructor.
      * @param PhoneNumber $origin
-     * @param int $direction
      * @param Contact $contact
      * @param DateTimeImmutable $date
      */
-    public function __construct(PhoneNumber $origin, int $direction, Contact $contact, DateTimeImmutable $date)
+    public function __construct(PhoneNumber $origin, Contact $contact, DateTimeImmutable $date)
     {
         $this->origin = $origin;
-        $this->direction = $direction;
         $this->contact = $contact;
         $this->date = $date;
     }
@@ -54,34 +49,6 @@ final class SMS implements WrittenCommunication
     public function destination(): PhoneNumber
     {
         return $this->contact->number();
-    }
-
-    /**
-     * @return string
-     */
-    public function direction(): string
-    {
-        if (true === $this->outgoing()) {
-            return 'outgoing';
-        }
-
-        return 'incoming';
-    }
-
-    /**
-     * @return bool
-     */
-    public function outgoing(): bool
-    {
-        return $this->direction === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function incoming(): bool
-    {
-        return $this->direction === 1;
     }
 
     /**

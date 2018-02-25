@@ -2,7 +2,7 @@
 
 namespace App\Domain\Communication;
 
-interface VoiceCommunication extends Communication
+interface SpokenCommunication extends Communication
 {
     /**
      * @return int

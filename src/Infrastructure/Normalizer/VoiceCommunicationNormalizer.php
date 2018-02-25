@@ -3,7 +3,7 @@
 namespace App\Infrastructure\Normalizer;
 
 use App\Domain\Communication\PhoneCall;
-use App\Domain\Communication\VoiceCommunication;
+use App\Domain\Communication\SpokenCommunication;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
@@ -54,6 +54,6 @@ class VoiceCommunicationNormalizer implements NormalizerInterface
      */
     public function supportsNormalization($data, $format = null)
     {
-        return $data instanceof VoiceCommunication;
+        return $data instanceof SpokenCommunication;
     }
 }

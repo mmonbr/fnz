@@ -1,46 +1,41 @@
 <?php
 
-namespace App\Domain\Communication;
+namespace App\Domain\Communication\Spoken;
 
 use DateTimeImmutable;
+use App\Domain\Communication\SpokenCommunication;
 use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
-final class PhoneCall implements VoiceCommunication
+abstract class PhoneCall implements SpokenCommunication
 {
     /**
      * @var PhoneNumber
      */
-    private $origin;
-    /**
-     * @var string
-     */
-    private $direction;
+    protected $origin;
     /**
      * @var Contact
      */
-    private $contact;
+    protected $contact;
     /**
      * @var DateTimeImmutable
      */
-    private $date;
+    protected $date;
     /**
      * @var int
      */
-    private $duration;
+    protected $duration;
 
     /**
      * Call constructor.
      * @param PhoneNumber $origin
-     * @param int $direction
      * @param Contact $contact
      * @param DateTimeImmutable $date
      * @param int $duration
      */
-    public function __construct(PhoneNumber $origin, int $direction, Contact $contact, DateTimeImmutable $date, int $duration)
+    public function __construct(PhoneNumber $origin, Contact $contact, DateTimeImmutable $date, int $duration)
     {
         $this->origin = $origin;
-        $this->direction = $direction;
         $this->contact = $contact;
         $this->date = $date;
         $this->duration = $duration;
@@ -60,34 +55,6 @@ final class PhoneCall implements VoiceCommunication
     public function destination(): PhoneNumber
     {
         return $this->contact->number();
-    }
-
-    /**
-     * @return string
-     */
-    public function direction(): string
-    {
-        if (true === $this->outgoing()) {
-            return 'outgoing';
-        }
-
-        return 'incoming';
-    }
-
-    /**
-     * @return bool
-     */
-    public function outgoing(): bool
-    {
-        return $this->direction === 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function incoming(): bool
-    {
-        return $this->direction === 1;
     }
 
     /**

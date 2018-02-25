@@ -2,7 +2,7 @@
 
 namespace App\Domain\Communication;
 
-interface VoiceCommunicationFactory
+interface SpokenCommunicationFactory
 {
     /**
      * @param string $origin
@@ -11,7 +11,7 @@ interface VoiceCommunicationFactory
      * @param string $contactName
      * @param string $date
      * @param int $duration
-     * @return VoiceCommunication
+     * @return SpokenCommunication
      */
-    public function create(string $origin, string $destination, int $direction, string $contactName, string $date, int $duration): VoiceCommunication;
+    public function create(string $origin, string $destination, int $direction, string $contactName, string $date, int $duration): SpokenCommunication;
 }

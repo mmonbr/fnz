@@ -4,13 +4,17 @@ namespace App\Infrastructure\Repository;
 
 use DateTimeImmutable;
 use GuzzleHttp\ClientInterface;
-use App\Domain\Communication\SMS;
-use App\Domain\Communication\PhoneCall;
 use GuzzleHttp\Exception\ClientException;
+use App\Domain\Communication\SpokenCommunication;
+use App\Domain\Communication\Written\IncomingSMS;
+use App\Domain\Communication\Written\OutgoingSMS;
 use App\Domain\Communication\ValueObject\Contact;
+use App\Domain\Communication\WrittenCommunication;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 use App\Domain\Communication\CommunicationCollection;
 use App\Domain\Communication\CommunicationRepository;
+use App\Domain\Communication\Spoken\IncomingPhoneCall;
+use App\Domain\Communication\Spoken\OutgoingPhoneCall;
 
 class LogCommunicationRepository implements CommunicationRepository
 {
@@ -63,9 +67,9 @@ class LogCommunicationRepository implements CommunicationRepository
 
     /**
      * @param array $data
-     * @return PhoneCall
+     * @return SpokenCommunication
      */
-    private function buildCallFromArray(array $data): PhoneCall
+    private function buildCallFromArray(array $data): SpokenCommunication
     {
         $data = array_map('trim', $data);
 
@@ -83,20 +87,28 @@ class LogCommunicationRepository implements CommunicationRepository
             new PhoneNumber($contactNumber)
         );
 
-        return new PhoneCall(
-            new PhoneNumber($origin),
-            $direction,
-            $contact,
-            $date,
-            $duration
-        );
+        if (1 === $direction) {
+            return new IncomingPhoneCall(
+                new PhoneNumber($origin),
+                $contact,
+                $date,
+                $duration
+            );
+        } else {
+            return new OutgoingPhoneCall(
+                new PhoneNumber($origin),
+                $contact,
+                $date,
+                $duration
+            );
+        }
     }
 
     /**
      * @param array $data
-     * @return SMS
+     * @return WrittenCommunication
      */
-    private function buildSMSFromArray(array $data): SMS
+    private function buildSMSFromArray(array $data): WrittenCommunication
     {
         $data = array_map('trim', $data);
 
@@ -113,11 +125,18 @@ class LogCommunicationRepository implements CommunicationRepository
             new PhoneNumber($contactNumber)
         );
 
-        return new SMS(
-            new PhoneNumber($origin),
-            $direction,
-            $contact,
-            $date
-        );
+        if (1 === $direction) {
+            return new IncomingSMS(
+                new PhoneNumber($origin),
+                $contact,
+                $date
+            );
+        } else {
+            return new OutgoingSMS(
+                new PhoneNumber($origin),
+                $contact,
+                $date
+            );
+        }
     }
 }

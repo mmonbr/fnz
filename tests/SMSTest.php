@@ -4,7 +4,7 @@ namespace App\Tests;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
-use App\Domain\Communication\SMS;
+use App\Domain\Communication\Written;
 use App\Domain\Communication\ValueObject\Contact;
 use App\Domain\Communication\ValueObject\PhoneNumber;
 
